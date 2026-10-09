@@ -4,17 +4,22 @@ session_start();
 if (isset($_POST["login"]) && isset($_POST["password"])) {
     if ($_POST["login"] == "admin" && $_POST["password"] == "tajne123") {
         $_SESSION["user"] = "admin";
+        
+    } else {
+       $_SESSION["blad"] = true;
 
+        header("Location: index.php");
+        exit();
+       }
+        // die("Błedny login lub hasło!") ;
     }
 
-}
 if (isset($_SESSION["user"])) {
+
+
     header("Location: panel.php");
-    exit;
+    exit();
 }
-;
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,10 +70,17 @@ if (isset($_SESSION["user"])) {
     button:hover {
         background-color: #0056b3;
     }
+    .error {
+        color: red;
+    }
 </style>
 
 <body>
     <form  method="post">
+      <?php if (isset($_SESSION['blad'])): ?>
+          <label class="error">Błędny login lub hasło!</label>
+    <?php unset($_SESSION['blad']); ?>
+      <?php endif; ?>
         <input type="text" name="login" id="2">
         <input type="password" name="password" id="3">
         <button type="submit" id="4">Login</button>
